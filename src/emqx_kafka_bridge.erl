@@ -19,10 +19,7 @@
 -include_lib("emqx/include/emqx.hrl").
 -include_lib("emqx/include/logger.hrl").
 
--export([register_metrics/0
-  , load/1
-  , unload/0
-]).
+-export([load/1, unload/0]).
 
 %% Client Lifecircle Hooks
 -export([on_client_connect/3
