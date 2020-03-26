@@ -211,7 +211,6 @@ brod_load(_Env) ->
   KafkaBootstrapEndpoints = [{KafkaBootstrapHost, KafkaBootstrapPort}],
   ClientConfig = [{auto_start_producers, true}, {default_producer_config, []}, {reconnect_cool_down_seconds, 10}, {reconnect_cool_down_seconds, 10}],
   ok = brod:start_client(KafkaBootstrapEndpoints, brod_client_1, ClientConfig),
-  ok = brod:start_producer(brod_client_1, <<"message_publish">>, _ProducerConfig = []),
   % emqx_metrics:inc('bridge.kafka.connected'),
   io:format("load brod with ~p~n", [KafkaBootstrapEndpoints]).
 
