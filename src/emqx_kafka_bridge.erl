@@ -233,6 +233,7 @@ produce_kafka_message(Topic, Message, ClientId, Env) ->
     IsAsyncProducer == false ->
       brod:produce_sync(brod_client_1, Topic, Partition, ClientId, JsonStr);
     true ->
-      brod:produce(brod_client_1, Topic, Partition, ClientId, JsonStr)
+      brod:produce_no_ack(brod_client_1, Topic, Partition, ClientId, JsonStr)
+%%      brod:produce(brod_client_1, Topic, Partition, ClientId, JsonStr)
   end,
   ok.
