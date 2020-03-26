@@ -1,0 +1,58 @@
+%%-*- mode: erlang -*-
+%% emqx_kafka_bridge config mapping
+
+{mapping, "bridge.bootstrap_broker_host", "emqx_kafka_bridge.bridges", [
+  {default, "localhost"},
+  {datatype, string}
+]}.
+{mapping, "bridge.bootstrap_broker_port", "emqx_kafka_bridge.bridges", [
+  {default, 9092},
+  {datatype, integer}
+]}.
+
+{mapping, "bridge.query_api_versions", "emqx_kafka_bridge.bridges", [
+  {default, true},
+  {datatype, {enum, [true, false]}}
+]}.
+
+{mapping, "bridge.reconnect_cool_down_seconds", "emqx_kafka_bridge.bridges", [
+  {default, 10},
+  {datatype, integer}
+]}.
+
+{mapping, "bridge.producer_partition", "emqx_kafka_bridge.bridges", [
+  {default, 1},
+  {datatype, integer}
+]}.
+
+{mapping, "bridge.is_async_producer", "emqx_kafka_bridge.bridges", [
+  {default, true},
+  {datatype, {enum, [true, false]}}
+]}.
+
+{mapping, "bridge.on_message_publish_topic", "emqx_kafka_bridge.bridges", [
+  {default, "test-topic"},
+  {datatype, string}
+]}.
+
+{
+  translation, "emqx_kafka_bridge.bridges", 
+    fun(Conf) ->
+      KafkaBootstrapBrokerHost      = cuttlefish:conf_get("bridge.bootstrap_broker_host"      , Conf),
+      KafkaBootstrapBrokerPort      = cuttlefish:conf_get("bridge.bootstrap_broker_port"      , Conf),
+      KafkaQueryApiVersions         = cuttlefish:conf_get("bridge.query_api_versions"         , Conf),
+      KafkaReconnectCoolDownSeconds = cuttlefish:conf_get("bridge.reconnect_cool_down_seconds", Conf),
+      KafkaProducerPartition        = cuttlefish:conf_get("bridge.producer_partition"         , Conf),
+      IsAsyncProducer               = cuttlefish:conf_get("bridge.is_async_producer"          , Conf),
+      OnMessagePublishTopic         = cuttlefish:conf_get("bridge.on_message_publish_topic"   , Conf),
+      [
+        {bootstrap_broker_host      , KafkaBootstrapBrokerHost}, 
+        {bootstrap_broker_port      , KafkaBootstrapBrokerPort}, 
+        {query_api_versions         , KafkaQueryApiVersions}, 
+        {reconnect_cool_down_seconds, KafkaReconnectCoolDownSeconds}, 
+        {producer_partition         , KafkaProducerPartition},
+        {is_async_producer          , IsAsyncProducer},
+        {on_message_publish_topic   , OnMessagePublishTopic}
+      ]
+    end
+}.
