@@ -150,9 +150,6 @@ on_message_publish(Message = #message{topic = <<"$SYS/", _/binary>>}, _Env) ->
 
 on_message_publish(Message, Env) ->
   #message{id = Id, qos = QoS, topic = Topic, from = From, flags = Flags, headers = Headers, payload = Payload, timestamp = Timestamp} = Message,
-%%  io:format("topic = ~s~n", [Topic]),
-%%  io:format("from = ~s~n", [From]),
-%%  io:format("message.payload ~s~n", [Payload]),
   Msg = [
     {qos, QoS},
     {topic, Topic},
@@ -162,10 +159,8 @@ on_message_publish(Message, Env) ->
     {payload, Payload},
     {timestamp, Timestamp}
   ],
-%%  {ok, Kafka} = application:get_env(?MODULE, bridges),
   Kafka = proplists:get_value(bridges, Env),
   OnMessagePublishTopic = proplists:get_value(on_message_publish_topic, Kafka),
-%%  io:format("OnMessagePublishTopic = ~p~n", [OnMessagePublishTopic]),
   produce_kafka_message(list_to_binary(OnMessagePublishTopic), Msg, From, Env),
   {ok, Message}.
 
@@ -206,11 +201,6 @@ unload() ->
   emqx:unhook('message.delivered', {?MODULE, on_message_delivered}),
   emqx:unhook('message.acked', {?MODULE, on_message_acked}),
   emqx:unhook('message.dropped', {?MODULE, on_message_dropped}).
-
-
-register_metrics() ->
-  [emqx_metrics:new(MetricName) || MetricName <- ['bridge.kafka.connected', 'bridge.kafka.disconnected', 'bridge.kafka.publish']].
-
 
 brod_load(_Env) ->
   {ok, _} = application:ensure_all_started(gproc),
