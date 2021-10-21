@@ -49,3 +49,5 @@ make
 ./_build/emqx/rel/emqx/bin/emqx console
 ./_build/emqx/rel/emqx/bin/emqx_ctl plugins load emqx_kafka_bridge
 ```
+## configure reference
+[emqx_kafka_bridge.conf](./etc/emqx_kafka_bridge.conf)

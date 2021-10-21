@@ -203,9 +203,15 @@ brod_load(_Env) ->
   {ok, _} = application:ensure_all_started(gproc),
   {ok, _} = application:ensure_all_started(brod),
   {ok, Kafka} = application:get_env(?MODULE, bridges),
-  KafkaBootstrapHost = proplists:get_value(bootstrap_broker_host, Kafka),
-  KafkaBootstrapPort = proplists:get_value(bootstrap_broker_port, Kafka),
-  KafkaBootstrapEndpoints = [{KafkaBootstrapHost, KafkaBootstrapPort}],
+  Endpoints = proplists:get_value(bootstrap_endpoints, Kafka),
+  Fun = fun(S) ->
+    case string:tokens(S, ":") of
+      [Domain] -> {Domain, 9092};
+      [Domain, Port] -> {Domain, list_to_integer(Port)}
+    end
+        end,
+  EndpointList = string:tokens(Endpoints, ","),
+  KafkaBootstrapEndpoints = [Fun(E) || E <- EndpointList],
   ClientConfig = [{auto_start_producers, true}, {default_producer_config, []}, {reconnect_cool_down_seconds, 10}, {reconnect_cool_down_seconds, 10}],
   ok = brod:start_client(KafkaBootstrapEndpoints, brod_client_1, ClientConfig),
   % emqx_metrics:inc('bridge.kafka.connected'),

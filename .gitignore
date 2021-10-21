@@ -10,7 +10,7 @@ rel/example_project
 .rebar
 .erlang.mk/
 emqx_kafka_bridge.d
-/.idea
+.idea
 .svn/
 .rebar3
 emqx-kafka-bridge.iml
