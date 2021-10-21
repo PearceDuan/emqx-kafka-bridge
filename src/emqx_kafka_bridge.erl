@@ -178,7 +178,7 @@ on_message_acked(_ClientInfo = #{clientid := ClientId}, Message, _Env) ->
 
 %% Called when the plugin application stop
 unload() ->
-  brod_unload(),
+%%  brod_unload(),
   emqx:unhook('client.connect', {?MODULE, on_client_connect}),
   emqx:unhook('client.connack', {?MODULE, on_client_connack}),
   emqx:unhook('client.connected', {?MODULE, on_client_connected}),
